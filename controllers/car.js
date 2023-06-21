@@ -58,7 +58,7 @@ module.exports.processAddPage = async (req, res, next) => {
     // ADD YOUR CODE HERE
     try {
 
-        let newCar = CarModelModel({
+        let newCar = CarModel({
             _id: req.body.id,
             make: req.body.make,
             model: req.body.model,
@@ -67,8 +67,7 @@ module.exports.processAddPage = async (req, res, next) => {
             doors: req.body.doors,
             seats: req.body.seats,
             color: req.body.color,
-            price: req.body.price,
-            tags: req.body.tags.split(",").map(word => word.trim())
+            price: req.body.price
         });
 
         let result = await CarModel.create(newCar)
@@ -114,7 +113,7 @@ module.exports.processEditPage = async (req, res, next) => {
         let id = req.params.id
 
         // Builds updatedCar from the values of the body of the request.
-        let updatedCar = CarModelModel({
+        let updatedCar = CarModel({
             _id: req.body.id,
             make: req.body.make,
             model: req.body.model,
@@ -123,12 +122,11 @@ module.exports.processEditPage = async (req, res, next) => {
             doors: req.body.doors,
             seats: req.body.seats,
             color: req.body.color,
-            price: req.body.price,
-            tags: req.body.tags.split(",").map(word => word.trim())
+            price: req.body.price
         });
 
         // Submits updatedCar to the DB and waits for a result.
-        let result = await CarModelModel.updateOne({ _id: id }, updatedCar);
+        let result = await CarModel.updateOne({ _id: id }, updatedCar);
         console.log(result);
 
         // If the car is updated redirects to the list
@@ -137,7 +135,7 @@ module.exports.processEditPage = async (req, res, next) => {
         }
         else {
             // Express will catch this on its own.
-            throw new Error('Car not udated. Are you sure it exists?') 
+            throw new Error('Car not updated. Are you sure it exists?') 
         }
 
     } catch (error) {
