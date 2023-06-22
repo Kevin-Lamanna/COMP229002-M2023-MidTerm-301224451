@@ -1,3 +1,12 @@
+/*
+Filename: app.js
+Author: Kevin Lamanna
+StudentID: 301224451
+Web App name: https://kevin-lamanna-comp229-midterm-fd3a782db0d9.herokuapp.com/
+*/
+
+// module imports
+
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
@@ -15,7 +24,7 @@ app.use(session({
   secret: "sessionSecret"
 }));
 
-
+// Router imports
 let indexRouter = require('../routes/index');
 let usersRouter = require('../routes/users');
 let carsRouter = require('../routes/car');
@@ -36,7 +45,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+// Routers (with paths)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cars', carsRouter);
