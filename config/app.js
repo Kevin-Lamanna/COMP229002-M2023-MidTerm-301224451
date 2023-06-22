@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../node_modules')));
 
-// Sets up passport
+// Sets up flash and passport
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
