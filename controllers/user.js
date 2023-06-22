@@ -2,7 +2,7 @@ let User = require('../models/user');
 let passport = require('passport');
 
 function getErrorMessage(err) {
-  console.log("===> Erro: " + err);
+  console.log("===> Error: " + err);
   let message = '';
 
   if (err.code) {
@@ -52,37 +52,46 @@ module.exports.renderSignup = function(req, res, next) {
   }
 };
 
-module.exports.signup = function(req, res, next) {
+module.exports.signup = async (req, res, next) => {
+  console.log(req.body);
   if (!req.user && req.body.password === req.body.password_confirm) {
-    console.log(req.body);
 
     let user = new User(req.body);
-    console.log(user);
 
-    user.save((err) => {
-      if (err) {
-        let message = getErrorMessage(err);
-
-        req.flash('error', message);
-        return res.render('auth/signup', {
-          title: 'Sign-up Form',
-          messages: req.flash('error'),
-          user: user
-        });
-      }
+    try {
+      let result = await user.save();
+      console.log(result);
       req.login(user, (err) => {
         if (err) return next(err);
+        
         return res.redirect('/');
       });
-    });
+    } catch (error) {
+      let message = getErrorMessage(error);
+
+      req.flash('error', message);
+      // return res.redirect('/users/signup');
+      return res.render('auth/signup', {
+        title: 'Sign-up Form',
+        messages: req.flash('error'),
+        user: user
+      });
+
+    }
+
   } else {
     return res.redirect('/');
   }
 };
 
 module.exports.signout = function(req, res, next) {
-  req.logout();
-  res.redirect('/');
+  // Version 0.6.0
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
 };
 
 module.exports.signin = function(req, res, next){
